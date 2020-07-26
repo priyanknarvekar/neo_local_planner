@@ -690,11 +690,12 @@ void NeoLocalPlanner::initialize(std::string name, tf2_ros::Buffer* tf, costmap_
 	m_max_backup_dist = 	private_nh.param<double>("max_backup_dist", m_differential_drive ? 0.1 : 0.0);
 	m_min_stop_dist = 		private_nh.param<double>("min_stop_dist", 0.5);
 	m_emergency_acc_lim_x = private_nh.param<double>("emergency_acc_lim_x", m_limits.acc_lim_x * 4);
+	m_base_frame = 			private_nh.param<std::string>("base_frame",costmap_ros->getBaseFrameID());
+	m_local_frame = 		private_nh.param<std::string>("local_frame","odom");
 
 	m_tf = tf;
 	m_cost_map = costmap_ros;
-	m_base_frame = costmap_ros->getBaseFrameID();
-
+	
 	m_odom_sub = nh.subscribe<nav_msgs::Odometry>("/odom", 1, boost::bind(&NeoLocalPlanner::odomCallback, this, _1));
 
 	m_local_plan_pub = private_nh.advertise<nav_msgs::Path>("local_plan", 1);
